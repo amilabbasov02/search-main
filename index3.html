@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .monitor_ad_item .all_select_change {
+            display: flex !important;
+        }
+
+        .all_slc_items {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            float: left;
+            width: calc(50% - 8px);
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .all_slc {
+            margin-right: 8px;
+        }
+
+        .all_unslc {
+            margin-left: 8px;
+        }
+
+        .all_slc input:checked~span {
+            background: #19BCBF;
+            color: #fff;
+        }
+
+        .all_unslc input:checked~span {
+            background: #b3b3b3;
+            color: #fff;
+        }
+
+        .all_slc_items input {
+            display: none !important;
+        }
+
+        .all_slc_items span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 45px;
+            border: 1px solid #e1e5ef;
+            border-radius: 5px;
+            background: #fff;
+            font-size: 15px;
+            line-height: 1.2;
+            color: #000;
+            transition: all .3s ease;
+        }
+
+        .all_select_change {
+            display: flex !important;
+        }
+
+        .selectable {
+            padding-left: 40px;
+        }
+
+        .selectable label {
+            display: block;
+        }
+
+        .country.checked::before {
+            content: "";
+            width: 13px;
+            height: 13px;
+            background: #005CC8;
+            color: #fff;
+            position: absolute;
+            left: 4px;
+            z-index: 4;
+            border-radius: 4px;
+            top: 1px;
+        }
+
+        .country {
+            position: relative;
+        }
+
+        .country.checked input::before {
+            content: "";
+            width: 6px;
+            height: 0px;
+            border: 0.1px solid white;
+            position: absolute;
+            left: 3px;
+            z-index: 5;
+            top: 5.5px;
+        }
+
+        .country input {
+            position: relative;
+        }
+
+        .region img {
+            width: 15px;
+            height: 15px;
+            transition: 0.3s all ease-in-out;
+        }
+
+        .selectable {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+
+        .active .selectable {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0);
+            position: relative;
+            transition: 0.3s all ease-in-out;
+        }
+
+        .active img {
+            transform: rotate(90deg);
+        }
+
+        .selectedItem {
+            background: #005CC8;
+            padding: 5px;
+            color: #fff;
+            border-radius: 8px;
+            display: inline-flex;
+            cursor: pointer;
+            margin-right: 5px;
+            position: relative;
+            padding-right: 25px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .selectedItem::after {
+            content: "";
+            position: absolute;
+            right: 5px;
+            background: url("./delete.svg");
+            width: 14px;
+            height: 12px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .pop-up {
+            display: flex;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s all ease-in-out;
+        }
+
+        .pop-up.active_pop {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pop {
+            background: #fff;
+            max-width: 350px;
+            width: 100%;
+            z-index: 9;
+        }
+
+        .pop-bg {
+            background: #000;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="">
+        <div id="selectionDisplay"></div>
+        <input class="search" type="text">
+        <div class="pop-up">
+            <div class="pop-bg"></div>
+            <div class="pop form-group address_form_group" id="adJsslot_id">
+                <!-- <label class="form-label">
+                    <input class="search-region" type="text">
+                </label> -->
+                <div class="form-select" id="slot_id">
+                    <div class="region">
+                        <span>
+                            <img src="./arrow.svg" alt="">
+                        </span>
+                        <label class="chb country">
+                            <input type="checkbox" name="val[slot_id][10062]" value="10062" id="slot_id10062"
+                                class="head_input">
+                            <span for="slot_id10062">Ü.Hacıbəyov küç. ilə Puşkin küç. kəs.</span>
+                        </label>
+                        <div class="selectable">
+                            <label class="chb">
+                                <input type="checkbox" name="val[slot_id][8611]" value="8611" id="slot_id8611"
+                                    data-id="1" checked>
+                                <span for="slot_id8611">Parlament pr. ilə M.Müşviq küç. kəs.</span>
+                            </label>
+                            <label class="chb">
+                                <input type="checkbox" name="val[slot_id][823]" value="823" data-id="2"
+                                    id="slot_id8239">
+                                <span for="slot_id8239">R.Behbudov küç. - Ü.Hacıbəyov küç. kəs.</span>
+                            </label>
+                            <label class="chb">
+                                <input type="checkbox" name="val[slot_id][829]" value="839" id="slot_id8239">
+                                <span for="slot_id8239">R.Behbudov küç. - Ü.Hacıbəyov küç. kəs.</span>
+                            </label> <label class="chb">
+                                <input type="checkbox" name="val[slot_id][839]" value="829" id="slot_id8239">
+                                <span for="slot_id8239">R.Behbudov küç. - Ü.Hacıbəyov küç. kəs.</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="region">
+                        <span>
+                            <img src="./arrow.svg" alt="">
+                        </span>
+                        <label class="chb country">
+                            <input type="checkbox" name="val[slot_id][1062]" value="1062" id="slot_id10062">
+                            <span for="slot_id10062">Ü.Hacıbəyov küç. ilə Puşkin küç. kəs.</span>
+                        </label>
+                        <div class="selectable">
+                            <label class="chb">
+                                <input type="checkbox" name="val[slot_id][8611]" value="861" id="slot_id8611">
+                                <span for="slot_id8611">Parlament pr. ilə M.Müşviq küç. kəs.</span>
+                            </label>
+                            <label class="chb">
+                                <input type="checkbox" name="val[slot_id][8239]" value="39" id="slot_id8239">
+                                <span for="slot_id8239">R.Behbudov küç. - Ü.Hacıbəyov küç. kəs.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="chb">
+                        <input type="checkbox" name="val[slot_id][8238]" value="8238" id="slot_id8238">
+                        <label for="slot_id8238">Bülbül pr. ilə Z.Əliyeva küç. kəs.</label>
+
+                    </div>
+
+
+                    <div class="all_select_change" style="display: none">
+                        <label class="all_slc_items all_unslc">
+                            <input type="radio" name="fullSelect">
+                            <span>bağla</span>
+                        </label>
+                        <label class="all_slc_items all_slc">
+                            <input type="radio" name="fullSelect">
+                            <span>qəbul et</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="./jquery-1.10.2.min.js"></script>
+    <script>
+        $(".search").click(function () {
+            $(".pop-up").addClass("active_pop")
+        })
+        $(".region span").click(function () {
+            $(this).parent().toggleClass("active")
+        })
+
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function (checkbox) {
+            var value = checkbox.value;
+            checkbox.dataset.id = value;
+
+            if (checkbox.checked) {
+                var span = document.createElement("span");
+                var dataId = checkbox.getAttribute("data-id");
+                var parentCountry = $(checkbox).parents('.country');
+                if (!parentCountry.length) {
+                    span.textContent = checkbox.value;
+                    span.setAttribute("class", "selectedItem");
+                    span.setAttribute("data-value", checkbox.value);
+                    if (dataId) {
+                        span.setAttribute("data-id", dataId);
+                    }
+                    selectionDisplay.appendChild(span);
+                }
+            }
+        });
+        $(".all_slc input").click(function () {
+            var selectedItems = document.querySelectorAll('input[type="checkbox"]:checked');
+            var selectionDisplay = document.getElementById("selectionDisplay");
+            selectionDisplay.innerHTML = "";
+            selectedItems.forEach(item => {
+                var span = document.createElement("span");
+                var dataId = item.getAttribute("data-id");
+                var parentCountry = $(item).parents('.country');
+                if (parentCountry.length) {
+                    span.textContent = item.value;
+                    span.setAttribute("class", "selectedItem");
+                    span.setAttribute("data-value", item.value);
+                    if (dataId) {
+                        span.setAttribute("data-id", dataId);
+                    }
+                    selectionDisplay.appendChild(span);
+                } else {
+                    var region = $(item).closest('.region');
+                    if (region.find('.country input:checked').length === 0) {
+                        span.textContent = item.value;
+                        span.setAttribute("class", "selectedItem");
+                        span.setAttribute("data-value", item.value);
+                        if (dataId) {
+                            span.setAttribute("data-id", dataId);
+                        }
+                        selectionDisplay.appendChild(span);
+                    }
+                }
+            });
+            $(".pop-up").removeClass("active_pop")
+        });
+
+        $(".all_unslc input").click(function () {
+            var selectedValues = Array.from(document.querySelectorAll('.selectedItem')).map(span => span.getAttribute('data-value'));
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                var value = checkbox.value;
+
+                if (selectedValues.includes(value)) {
+
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            });
+
+            $(".pop-up").removeClass("active_pop");
+        });
+        $(".pop-bg").click(function () {
+            var selectedValues = Array.from(document.querySelectorAll('.selectedItem')).map(span => span.getAttribute('data-value'));
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                var value = checkbox.value;
+
+                if (selectedValues.includes(value)) {
+
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            });
+
+            $(".pop-up").removeClass("active_pop");
+        });
+
+        $(".region .country").click(function () {
+            if ($(this).find("input").is(":checked")) {
+                $(this).parent().find('.selectable .chb input').prop("checked", true);
+                $(this).removeClass("checked");
+            } else {
+                $(this).parent().find('.selectable .chb input').prop("checked", false);
+            }
+        });
+        $(".region .selectable .chb").click(function () {
+            var region = $(this).closest('.region');
+            var selectableInputs = region.find('.selectable input[type="checkbox"]');
+            var country = region.find('.country');
+
+            if ($(this).find("input").is(":checked")) {
+                $(this).parent().siblings('.country').addClass("checked");
+
+                if (selectableInputs.length === selectableInputs.filter(":checked").length) {
+                    country.removeClass("checked");
+                    country.find('input[type="checkbox"]').prop("checked", true);
+                }
+            } else {
+                country.find('input[type="checkbox"]').prop("checked", false);
+                $(this).parent().siblings('.country').addClass("checked");
+                if (!selectableInputs.is(":checked")) {
+                    country.removeClass("checked");
+                    country.find('input[type="checkbox"]').prop("checked", false);
+                }
+            }
+        });
+        $('.region .selectable .chb input').each(function () {
+            if ($(this).is(":checked")) {
+                $(this).parents('.region').find('.country').addClass("checked");
+                $(this).parents('.region').addClass("active");
+            }
+        });
+        document.getElementById("selectionDisplay").addEventListener("click", function (event) {
+            if (event.target.classList.contains("selectedItem")) {
+                var dataId = event.target.dataset.id;
+                var checkbox = document.querySelector('input[type="checkbox"][data-id="' + dataId + '"]');
+                if ($(checkbox).parent().hasClass("country")) {
+                    $(checkbox).parent().next(".selectable").find("input").prop("checked", false);
+                }
+                if (checkbox) {
+                    checkbox.checked = false;
+                    event.target.remove();
+                } else {
+                    // console.log("Checkbox bulunamadı:", dataId);
+                }
+            }
+            var region = $(checkbox).closest('.region');
+            var selectableInputs = region.find('.selectable input[type="checkbox"]');
+            var country = region.find('.country');
+
+            if ($(checkbox).find("input").is(":checked")) {
+                $(checkbox).parent().siblings('.country').addClass("checked");
+
+                if (selectableInputs.length === selectableInputs.filter(":checked").length) {
+                    country.removeClass("checked");
+                    country.find('input[type="checkbox"]').prop("checked", true);
+                }
+            } else {
+                country.find('input[type="checkbox"]').prop("checked", false);
+                $(checkbox).parent().siblings('.country').addClass("checked");
+                if (!selectableInputs.is(":checked")) {
+                    country.removeClass("checked");
+                    country.find('input[type="checkbox"]').prop("checked", false);
+                }
+            }
+        });
+        // $(".search-region").on("input", function () {
+        //     var searchText = $(this).val().trim().toLowerCase();
+
+        //     // Tüm chb ve span içindeki img öğelerini gizle
+        //     $(".chb, .region span img").hide();
+
+        //     // Arama metniyle eşleşen seçenekleri göster
+        //     $(".chb input").filter(function () {
+        //         return $(this).val().trim().toLowerCase().includes(searchText);
+        //     }).closest('.chb').show().parent().find('.region span img').show();
+        // });
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
